@@ -2,6 +2,12 @@
 
 A simple shell program that works in both interactive and non-interactive mode. Error handling is similar to `sh` (`/bin/sh`) command with the only difference that the program name is equivalent to `argv[0]` (`hsh`). 
 
+## Requirements
+Install cmake and Google Test
+```bash
+sudo apt-get install -y cmake libgtest-dev
+```
+
 ## getting started
 Run the following command to build and run `myshell` program
 ```bash
