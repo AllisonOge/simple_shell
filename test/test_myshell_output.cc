@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
 #include "test_myshell.h"
 #include <string.h>
+
 #define BUFF_SIZE 1024
 
-TEST(MyShellTest, ErrorMsg) {
-    const char* cmd = "/bin/ls unknown_file";
+TEST(MyShellTest, OutputMsg) {
+    const char* cmd = "/bin/ls -l";
     char buf[BUFF_SIZE];
     // char *myshell_output = nullptr, *sh_output = nullptr;
     std::string myshell_output_str, sh_output_str;
@@ -19,8 +20,8 @@ TEST(MyShellTest, ErrorMsg) {
     sh_exit_code = exec_pgm(buf, "/tmp/sh_output", "/tmp/sh_error");
 
     // open the output files
-    FILE *myshell_output_file = fopen("/tmp/myshell_error", "r");
-    FILE *sh_output_file = fopen("/tmp/sh_error", "r");
+    FILE *myshell_output_file = fopen("/tmp/myshell_output", "r");
+    FILE *sh_output_file = fopen("/tmp/sh_output", "r");
 
     // compare the output files
     while (fgets(buf, BUFF_SIZE, myshell_output_file) != NULL) {
