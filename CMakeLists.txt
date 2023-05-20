@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.11)
-project(myshell C)
+cmake_minimum_required(VERSION 3.0)
+project(myshell)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_C_COMPILER "/usr/bin/gcc")
@@ -12,9 +12,12 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 # set the C standard
 set(CMAKE_C_STANDARD 90)
 
-enable_testing()
+option(ENABLE_VALGRIND "Enable valgrind tests" ON)
+if (ENABLE_VALGRIND)
+	enable_testing()
+endif()
 
-# add_subdirectory(test)
+add_subdirectory(test)
 
 include_directories(include)
 file(GLOB_RECURSE SRC main.c 
