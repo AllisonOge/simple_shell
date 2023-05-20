@@ -81,3 +81,43 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
     }
     
 }
+
+/**
+ * printenv - print the environment variables
+ * @env: the array of environment variables
+*/
+void printenv(char **env)
+{
+    int i = 0;
+
+    while (env[i] != NULL)
+    {
+        printf("%s\n", env[i]);
+        i++;
+    }
+}
+
+/**
+ * _cd - change the current working directory
+ * @filepath: the path to the directory
+ * @pgm: the name of the program
+*/
+void _cd(char *filepath, char *pgm)
+{
+    int errnum;
+    struct stat st;
+
+    if (stat(filepath, &st) == 0)
+    {
+        if (chdir(filepath) == -1)
+        {
+            errnum = errno;
+            perror("Error");
+            exit(errnum);
+        }
+    } else
+    {
+        dprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n", pgm, filepath);
+    }
+    
+}
