@@ -6,14 +6,16 @@
 
 /**
 * main - entry point
+* @ac: the number of arguments
+* @av: the array of arguments
+* @env: the array of environment variables
 *
 * Return: Always 0 (Success)
 */
-int main(void)
+int main(int ac __attribute__((unused)), char **av, char **env)
 {
-	int tty = 0;
+	int tty = 0, status = 0;
 	char *cmdline = NULL;
-	int status = 0;
 	size_t len = 0;
 	char* argv[100];
 
@@ -35,7 +37,7 @@ int main(void)
 			free(cmdline);
 			exit(0);
 		}
-		runcmd(parsecmd(cmdline, argv), &status);
+		runcmd(parsecmd(cmdline, argv), &status, av[0], env);
 		if (tty)
 			write(1, "$ ", 2);
 	}
