@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "test_myshell.h"
 #include <string.h>
-#define BUFF_SIZE 1024
 
 TEST(MyShellTest, ExitCode) {
     char buf[BUFF_SIZE];

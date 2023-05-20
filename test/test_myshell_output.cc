@@ -2,8 +2,6 @@
 #include "test_myshell.h"
 #include <string.h>
 
-#define BUFF_SIZE 1024
-
 TEST(MyShellTest, OutputMsg) {
     const char* cmd = "/bin/ls -l";
     char buf[BUFF_SIZE];
@@ -39,7 +37,7 @@ TEST(MyShellTest, OutputMsg) {
 
     // check if both exit codes are the same
     EXPECT_EQ(myshell_exit_code, sh_exit_code);
-    // check if both error messages are the same
+    // check if both output messages are the same
     EXPECT_STREQ(myshell_output_str.c_str(), sh_output_str.c_str());
 
 }

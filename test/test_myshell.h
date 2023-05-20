@@ -1,5 +1,7 @@
 #pragma once
 
+#define BUFF_SIZE 1024
+
 int exec_pgm(const char *cmd, const char *filepath, const char *errpath);
 
 class MyShellTest : public ::testing::Test {

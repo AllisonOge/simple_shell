@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "test_myshell.h"
 #include <string.h>
-#define BUFF_SIZE 1024
 
 TEST(MyShellTest, ErrorMsg) {
     const char* cmd = "/bin/ls unknown_file";
