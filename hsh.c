@@ -45,41 +45,84 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 {
 	pid_t pid;
 	int errnum;
+	char *cmdpath = NULL;
 	struct stat st;
 
 	/* check if command exit */
-	if (stat(argv[0], &st) == 0)
+	if (stat(argv[0], &st) != 0)
 	{
-		pid = fork();
-		if (pid == 0)
+		/* get the fullpath from the env */
+		cmdpath = getcmdpath(argv[0], env);
+		printf("argv[0] -> %s\n", cmdpath);
+		if (!cmdpath)
 		{
-			if (execve(argv[0], argv, env) == -1)
-			{
-				errnum = errno;
-				perror("Error");
-				exit(errnum);
-			}
+			*status = 32512;
+			dprintf(STDERR_FILENO, "%s: 1: %s: not found\n", pgm, argv[0]);
+			return;
 		}
-		else if (pid < 0)
+		strcpy(argv[0], cmdpath);
+		free(cmdpath);
+	}
+
+	/* fork and execute command */
+	pid = fork();
+	if (pid == 0)
+	{
+		if (execve(argv[0], argv, env) == -1)
 		{
+			errnum = errno;
 			perror("Error");
+			exit(errnum);
 		}
-		else
-		{
-			do {
-				waitpid(pid, status, WUNTRACED);
-			} while (!WIFEXITED(*status) && !WIFSIGNALED(*status));
-			/*
-			* printf("error number -> %d\n", errno);
-			* printf("exit code -> %d\n", WEXITSTATUS(*status));
-			* printf("exit signal -> %d\n", WTERMSIG(*status));
-			*/
-		}
+	} else if (pid < 0)
+	{
+		perror("Error");
 	} else
 	{
-		*status = 32512;
-		dprintf(STDERR_FILENO, "%s: 1: %s: not found\n", pgm, argv[0]);
+		do {
+			waitpid(pid, status, WUNTRACED);
+		} while (!WIFEXITED(*status) && !WIFSIGNALED(*status));
 	}
+}
+
+/**
+ * getcmdpath - get the full path of the command
+ * @cmd: the command
+ * @env: the array of environment variables
+ *
+ * Return: the full path of the command
+*/
+char *getcmdpath(char *cmd, char **env)
+{
+	char *path = NULL, fullpath[BUFF_SIZE];
+	char *token;
+	char *delimiters = ":\n\t\n\r";
+	int i = 0;
+	struct stat st;
+
+	while (env[i] != NULL)
+	{
+		if (strncmp(env[i], "PATH", 4) == 0)
+		{
+			path = strdup(env[i] + 5);
+			break;
+		}
+		i++;
+	}
+	token = strtok(path, delimiters);
+	while (token != NULL)
+	{
+		strcat(strcpy(fullpath, token), "/");
+		strcat(strcat(fullpath, cmd), "\0");
+		if (stat(fullpath, &st) == 0)
+		{
+			free(path);
+			return (strdup(fullpath));
+		}
+		token = strtok(NULL, delimiters);
+	}
+	free(path);
+	return (NULL);
 }
 
 /**

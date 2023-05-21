@@ -40,6 +40,9 @@ if (ENABLE_VALGRIND)
         add_test(NAME ValgrindFullPathWithArgs 
             COMMAND ${VALGRIND} ${VALGRIND_OPTIONS} 
             "/bin/echo" "/bin/ls -l" "|" ${CMAKE_BINARY_DIR}/myshell)
+        add_test(NAME ValgrindCmdWithArgs 
+            COMMAND ${VALGRIND} ${VALGRIND_OPTIONS} 
+            "/bin/echo" "ls -l" "|" ${CMAKE_BINARY_DIR}/myshell)
     else()
         message(FATAL_ERROR "Valgrind not found")
     endif()
