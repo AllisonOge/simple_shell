@@ -26,7 +26,8 @@ add_test(NAME OutputMsg
         COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test_myshell_output)
 
 # set PATH to find myshell
-set_tests_properties(ExitCode ErrorMsg PROPERTIES ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
+set_tests_properties(ExitCode ErrorMsg OutputMsg 
+        PROPERTIES ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 
 if (ENABLE_VALGRIND)
     set(VALGRIND_EXECUTABLE "/usr/bin/valgrind" CACHE STRING "Valgrind executable")
