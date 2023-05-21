@@ -14,21 +14,20 @@
 */
 int main(int ac __attribute__((unused)), char **av, char **env)
 {
-	int tty = 0, status = 0;
+	int status = 0;
 	char *cmdline = NULL;
 	size_t len = 0;
 	char *argv[100];
 
 	if (isatty(STDIN_FILENO))
 	{
-		tty = 1;
 		write(1, "$ ", 2);
 	}
 	while (getline(&cmdline, &len, stdin) != -1)
 	{
 		if (cmdline[0] == '\n')
 		{
-			if (tty)
+			if (isatty(STDIN_FILENO))
 				write(1, "$ ", 2);
 			continue;
 		}
@@ -46,12 +45,12 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		{
 			runcmd(parsecmd(cmdline, argv), &status, av[0], env);
 		}
-		if (tty)
+		if (isatty(STDIN_FILENO))
 			write(1, "$ ", 2);
 	}
 	free(cmdline);
 
-	if (feof(stdin))
+	if (feof(stdin) && isatty(STDIN_FILENO))
 	{
 		write(1, "\n", 1);
 	}
