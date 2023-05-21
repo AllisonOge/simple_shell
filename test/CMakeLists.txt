@@ -34,8 +34,12 @@ if (ENABLE_VALGRIND)
     find_program(VALGRIND "valgrind")
     if (VALGRIND)
         set(VALGRIND_OPTIONS "valgrind --leak-check=full --error-exitcode=1")
+
         separate_arguments(VALGRIND_OPTIONS)
-        
+
+        add_test(NAME ValgrindFullPathWithArgs 
+            COMMAND ${VALGRIND} ${VALGRIND_OPTIONS} 
+            "/bin/echo" "/bin/ls -l" "|" ${CMAKE_BINARY_DIR}/myshell)
     else()
         message(FATAL_ERROR "Valgrind not found")
     endif()
