@@ -38,9 +38,6 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		} else if (strncmp(cmdline, "env", 3) == 0)
 		{
 			printenv(env);
-		} else if (strncmp(cmdline, "cd", 2) == 0)
-		{
-			_cd(cmdline + 3, av[0]);
 		} else
 		{
 			runcmd(parsecmd(cmdline, argv), &status, av[0], env);

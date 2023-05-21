@@ -19,7 +19,7 @@ char **parsecmd(char *cmdline, char **argv)
 {
 	char *token;
 	int i = 0;
-	char *delimiters = " \n\t";
+	char *delimiters = " \n\t\n\r";
 
 	token = strtok(cmdline, delimiters);
 	while (token != NULL)
