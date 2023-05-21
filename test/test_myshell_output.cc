@@ -5,8 +5,8 @@
 TEST(MyShellTest, OutputMsg) {
     const char* cmd = "/bin/ls -l";
     char buf[BUFF_SIZE];
-    // char *myshell_output = nullptr, *sh_output = nullptr;
     std::string myshell_output_str, sh_output_str;
+    std::string myshell_error_str, sh_error_str;
     int myshell_exit_code, sh_exit_code;
 
     // invoke myshell command with unknown command
@@ -17,27 +17,16 @@ TEST(MyShellTest, OutputMsg) {
     snprintf((char *)buf, BUFF_SIZE, "/bin/sh -c \"%s\"", cmd);
     sh_exit_code = exec_pgm(buf, "/tmp/sh_output", "/tmp/sh_error");
 
-    // open the output files
-    FILE *myshell_output_file = fopen("/tmp/myshell_output", "r");
-    FILE *sh_output_file = fopen("/tmp/sh_output", "r");
-
-    // compare the output files
-    while (fgets(buf, BUFF_SIZE, myshell_output_file) != NULL) {
-        // myshell_output = strdup(buf);
-        myshell_output_str += buf;
-    }
-    while (fgets(buf, BUFF_SIZE, sh_output_file) != NULL) {
-        // sh_output = strdup(buf);
-        sh_output_str += buf;
-    }
-
-    // close the output files
-    fclose(myshell_output_file);
-    fclose(sh_output_file);
+    // read output and error files
+    myshell_output_str = read_file("/tmp/myshell_output");
+    myshell_error_str = read_file("/tmp/myshell_error");
+    sh_output_str = read_file("/tmp/sh_output");
+    sh_error_str = read_file("/tmp/sh_error");
 
     // check if both exit codes are the same
     EXPECT_EQ(myshell_exit_code, sh_exit_code);
     // check if both output messages are the same
     EXPECT_STREQ(myshell_output_str.c_str(), sh_output_str.c_str());
-
+    // check if both error messages are the same
+    EXPECT_STREQ(myshell_error_str.c_str(), sh_error_str.c_str());
 }
