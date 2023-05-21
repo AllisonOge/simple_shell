@@ -17,20 +17,20 @@
 */
 char **parsecmd(char *cmdline, char **argv)
 {
-    char *token;
-    int i = 0;
-    char *delimiters = " \n\t";
+	char *token;
+	int i = 0;
+	char *delimiters = " \n\t";
 
-    token = strtok(cmdline, delimiters);
-    while (token != NULL)
-    {
-        argv[i] = token;
-        token = strtok(NULL, delimiters);
-        i++;
-    }
-    argv[i] = NULL;
+	token = strtok(cmdline, delimiters);
+	while (token != NULL)
+	{
+		argv[i] = token;
+		token = strtok(NULL, delimiters);
+		i++;
+	}
+	argv[i] = NULL;
 
-    return (argv);
+	return (argv);
 }
 
 
@@ -43,43 +43,43 @@ char **parsecmd(char *cmdline, char **argv)
 */
 void runcmd(char **argv, int *status, char *pgm, char **env)
 {
-    pid_t pid;
-    int errnum;
-    struct stat st;
+	pid_t pid;
+	int errnum;
+	struct stat st;
 
-    /* check if command exit */
-    if (stat(argv[0], &st) == 0)
-    {
-        pid = fork();
-        if (pid == 0)
-        {
-            if (execve(argv[0], argv, env) == -1)
-            {
-                errnum = errno;
-                perror("Error");
-                exit(errnum);
-            }
-        }
-        else if (pid < 0)
-        {
-            perror("Error");
-        }
-        else
-        {
-            do
-            {
-                waitpid(pid, status, WUNTRACED);
-            } while (!WIFEXITED(*status) && !WIFSIGNALED(*status));
-            /*printf("error number -> %d\n", errno);
-            printf("exit code -> %d\n", WEXITSTATUS(*status));
-            printf("exit signal -> %d\n", WTERMSIG(*status));*/
-        }
-    } else
-    {
-        *status = 32512;
-        dprintf(STDERR_FILENO, "%s: 1: %s: not found\n", pgm, argv[0]);
-    }
-    
+	/* check if command exit */
+	if (stat(argv[0], &st) == 0)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			if (execve(argv[0], argv, env) == -1)
+			{
+				errnum = errno;
+				perror("Error");
+				exit(errnum);
+			}
+		}
+		else if (pid < 0)
+		{
+			perror("Error");
+		}
+		else
+		{
+			do {
+				waitpid(pid, status, WUNTRACED);
+			} while (!WIFEXITED(*status) && !WIFSIGNALED(*status));
+			/*
+			* printf("error number -> %d\n", errno);
+			* printf("exit code -> %d\n", WEXITSTATUS(*status));
+			* printf("exit signal -> %d\n", WTERMSIG(*status));
+			*/
+		}
+	} else
+	{
+		*status = 32512;
+		dprintf(STDERR_FILENO, "%s: 1: %s: not found\n", pgm, argv[0]);
+	}
 }
 
 /**
@@ -88,13 +88,13 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 */
 void printenv(char **env)
 {
-    int i = 0;
+	int i = 0;
 
-    while (env[i] != NULL)
-    {
-        printf("%s\n", env[i]);
-        i++;
-    }
+	while (env[i] != NULL)
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
 }
 
 /**
@@ -104,20 +104,19 @@ void printenv(char **env)
 */
 void _cd(char *filepath, char *pgm)
 {
-    int errnum;
-    struct stat st;
+	int errnum;
+	struct stat st;
 
-    if (stat(filepath, &st) == 0)
-    {
-        if (chdir(filepath) == -1)
-        {
-            errnum = errno;
-            perror("Error");
-            exit(errnum);
-        }
-    } else
-    {
-        dprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n", pgm, filepath);
-    }
-    
+	if (stat(filepath, &st) == 0)
+	{
+		if (chdir(filepath) == -1)
+		{
+			errnum = errno;
+			perror("Error");
+			exit(errnum);
+		}
+	} else
+	{
+		dprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n", pgm, filepath);
+	}
 }

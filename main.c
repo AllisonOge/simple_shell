@@ -17,7 +17,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	int tty = 0, status = 0;
 	char *cmdline = NULL;
 	size_t len = 0;
-	char* argv[100];
+	char *argv[100];
 
 	if (isatty(STDIN_FILENO))
 	{
@@ -42,13 +42,14 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		} else if (strncmp(cmdline, "cd", 2) == 0)
 		{
 			_cd(cmdline + 3, av[0]);
-		} else 
+		} else
 		{
 			runcmd(parsecmd(cmdline, argv), &status, av[0], env);
 		}
 		if (tty)
 			write(1, "$ ", 2);
 	}
+	free(cmdline);
 
 	if (feof(stdin))
 	{
