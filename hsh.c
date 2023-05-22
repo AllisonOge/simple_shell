@@ -19,7 +19,7 @@ char **parsecmd(char *cmdline, char **argv)
 {
 	char *token;
 	int i = 0;
-	char *delimiters = " \n\t\n\r";
+	char *delimiters = " \n\t\v\r";
 
 	token = strtok(cmdline, delimiters);
 	while (token != NULL)
@@ -53,7 +53,6 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 	{
 		/* get the fullpath from the env */
 		cmdpath = getcmdpath(argv[0], env);
-		printf("argv[0] -> %s\n", cmdpath);
 		if (!cmdpath)
 		{
 			*status = 32512;
@@ -90,13 +89,13 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
  * @cmd: the command
  * @env: the array of environment variables
  *
- * Return: the full path of the command
+ * Return: the full path of the command or NULL if not found
 */
 char *getcmdpath(char *cmd, char **env)
 {
 	char *path = NULL, fullpath[BUFF_SIZE];
 	char *token;
-	char *delimiters = ":\n\t\n\r";
+	char *delimiters = ":\n\t\v\r";
 	int i = 0;
 	struct stat st;
 
