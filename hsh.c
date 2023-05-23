@@ -12,7 +12,7 @@
  * parsecmd - parse the command line and tokenize the string
  * @cmdline: the command line string
  * @argv: the array of strings to store the tokens
- *
+ * Done by Ogechukwu and Florien.
  * Return: the array of strings containing the tokens
 */
 char **parsecmd(char *cmdline, char **argv)
