@@ -17,13 +17,14 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	int status = 0;
 	char *cmdline = NULL;
 	size_t len = 0;
+	ssize_t nread;
 	char *argv[100];
 
 	if (isatty(STDIN_FILENO))
 	{
 		write(1, "$ ", 2);
 	}
-	while (getline(&cmdline, &len, stdin) != -1)
+	while ((nread = _getline(&cmdline, &len, STDIN_FILENO)) > 0)
 	{
 		if (cmdline[0] == '\n')
 		{
@@ -47,7 +48,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	}
 	free(cmdline);
 
-	if (feof(stdin) && isatty(STDIN_FILENO))
+	if (nread == -2 && isatty(STDIN_FILENO))
 	{
 		write(1, "\n", 1);
 	}

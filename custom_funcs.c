@@ -20,8 +20,8 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 {
 	static char buffer[BUFF_SIZE], *ptr;
 	static int nread;
-	size_t buffer_pos = 0;
 	char *tmp = 0;
+	size_t buffer_pos = 0;
 
 	if (fd < 0 || !lineptr || !n)
 		return (-1);
@@ -42,7 +42,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	if (nread == -1)
 		return (-1);
 	if (nread == 0)
-		return (0);
+		return (-2);
 	/* read line */
 	while (*ptr != '\n')
 	{
@@ -86,7 +86,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 char *_strtok(char *str, const char *delim)
 {
 	static char *next;
-	char *end;
+	char *tok;
 
 	/* if str is NULL, use saved pointer as start of string */
 	if (str == NULL)
@@ -99,22 +99,18 @@ char *_strtok(char *str, const char *delim)
 		return (NULL);
 	}
 	str += strspn(str, delim); /* skip to the end of the token */
-	if (*str == '\0')
-	{
-		next = str;
-		return (NULL);
-	}
-	end = str + strcspn(str, delim); /* find end of token */
+	tok = str;
+	str += strcspn(str, delim); /* find end of token */
 	/*
-	 * if end of string is reached, null-terminate delimiter
-	 * and set next to the next token
+	 * if end of string is reached, set next to the end of the string,
+	 * else null-terminate delimiter and set next to the next token
 	 */
-	if (*end == '\0')
+	if (*str == '\0')
+		next = str;
+	else
 	{
-		next = end;
-		return (str);
+		*str = '\0';
+		next = str + 1;
 	}
-	*end = '\0';
-	next = end + 1;
-	return (str);
+	return (tok);
 }

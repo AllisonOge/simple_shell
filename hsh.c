@@ -45,7 +45,7 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 {
 	pid_t pid;
 	int errnum;
-	char *cmdpath = NULL;
+	char *cmdpath = NULL, buf[BUFF_SIZE];
 	struct stat st;
 
 	/* check if command exit */
@@ -59,7 +59,8 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 			dprintf(STDERR_FILENO, "%s: 1: %s: not found\n", pgm, argv[0]);
 			return;
 		}
-		strcpy(argv[0], cmdpath);
+		strcpy(buf, cmdpath);
+		argv[0] = buf;
 		free(cmdpath);
 	}
 
