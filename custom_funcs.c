@@ -36,10 +36,11 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	if (ptr == NULL || nread == 0)
 	{
 		nread = read(fd, buffer, BUFF_SIZE);
+		if (nread == -1)
+			return (-1);
 		ptr = buffer;
 	}
-	if (nread == -1)
-		return (-1);
+	/* return -2 if end of file */
 	if (nread == 0)
 		return (-2);
 	/* read line */
@@ -110,7 +111,7 @@ char *_strtok(char *str, const char *delim)
 	/* if str is NULL, use saved pointer as start of string */
 	if (str == NULL)
 		str = next;
-
+	str += strspn(str, delim); /* skip leading delimiters */
 	/* if no more tokens are available, return NULL */
 	if (*str == '\0')
 	{
