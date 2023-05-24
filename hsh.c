@@ -12,7 +12,7 @@
  * parsecmd - parse the command line and tokenize the string
  * @cmdline: the command line string
  * @argv: the array of strings to store the tokens
- * Done by Ogechukwu and Florien.
+ *
  * Return: the array of strings containing the tokens
 */
 char **parsecmd(char *cmdline, char **argv)
@@ -21,11 +21,11 @@ char **parsecmd(char *cmdline, char **argv)
 	int i = 0;
 	char *delimiters = " \n\t\v\r";
 
-	token = strtok(cmdline, delimiters);
+	token = _strtok(cmdline, delimiters);
 	while (token != NULL)
 	{
 		argv[i] = token;
-		token = strtok(NULL, delimiters);
+		token = _strtok(NULL, delimiters);
 		i++;
 	}
 	argv[i] = NULL;
@@ -108,7 +108,7 @@ char *getcmdpath(char *cmd, char **env)
 		}
 		i++;
 	}
-	token = strtok(path, delimiters);
+	token = _strtok(path, delimiters);
 	while (token != NULL)
 	{
 		strcat(strcpy(fullpath, token), "/");
@@ -118,7 +118,7 @@ char *getcmdpath(char *cmd, char **env)
 			free(path);
 			return (strdup(fullpath));
 		}
-		token = strtok(NULL, delimiters);
+		token = _strtok(NULL, delimiters);
 	}
 	free(path);
 	return (NULL);

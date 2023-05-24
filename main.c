@@ -23,7 +23,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	{
 		write(1, "$ ", 2);
 	}
-	while (getline(&cmdline, &len, stdin) != -1)
+	while (_getline(&cmdline, &len, STDIN_FILENO) != -1)
 	{
 		if (cmdline[0] == '\n')
 		{
