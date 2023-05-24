@@ -9,6 +9,23 @@
 #include <sys/wait.h>
 
 /**
+ * getcmd - prompt in tty mode and read the command line
+ * @cmdline: the command line string
+ * @len: the length of the command line
+ * @prompt: the prompt to display
+ *
+ * Return: the length of the command line or -1 if failed
+*/
+ssize_t getcmd(char **cmdline, size_t *len, char *prompt)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		write(1, prompt, strlen(prompt));
+	}
+	return (getline(cmdline, len, stdin));
+}
+
+/**
  * parsecmd - parse the command line and tokenize the string
  * @cmdline: the command line string
  * @argv: the array of strings to store the tokens
@@ -19,7 +36,7 @@ char **parsecmd(char *cmdline, char **argv)
 {
 	char *token;
 	int i = 0;
-	char *delimiters = " \n\t\n\r";
+	char *delimiters = " \n\t\v\r";
 
 	token = strtok(cmdline, delimiters);
 	while (token != NULL)
@@ -96,7 +113,7 @@ char *getcmdpath(char *cmd, char **env)
 {
 	char *path = NULL, fullpath[BUFF_SIZE];
 	char *token;
-	char *delimiters = ":\n\t\n\r";
+	char *delimiters = ": \n\t\v\r";
 	int i = 0;
 	struct stat st;
 
@@ -144,22 +161,23 @@ void printenv(char **env)
  * _cd - change the current working directory
  * @filepath: the path to the directory
  * @pgm: the name of the program
-*/
-void _cd(char *filepath, char *pgm)
-{
-	int errnum;
-	struct stat st;
-
-	if (stat(filepath, &st) == 0)
-	{
-		if (chdir(filepath) == -1)
-		{
-			errnum = errno;
-			perror("Error");
-			exit(errnum);
-		}
-	} else
-	{
-		dprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n", pgm, filepath);
-	}
-}
+ *
+ * void _cd(char *filepath, char *pgm)
+ * {
+ *	int errnum;
+ *	struct stat st;
+ *
+ *	if (stat(filepath, &st) == 0)
+ *	{
+ *		if (chdir(filepath) == -1)
+ *		{
+ *			errnum = errno;
+ *			perror("Error");
+ *			exit(errnum);
+ *		}
+ *	} else
+ *	{
+ *		dprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n", pgm, filepath);
+ *	}
+ *}
+ */
