@@ -26,7 +26,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		if (strncmp(cmdline, "exit", 4) == 0)
 		{
 			free(cmdline);
-			exit(EXIT_SUCCESS);
+			exit(WEXITSTATUS(status));
 		} else if (strncmp(cmdline, "env", 3) == 0)
 		{
 			printenv(env);
