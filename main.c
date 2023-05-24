@@ -14,7 +14,7 @@
 */
 int main(int ac __attribute__((unused)), char **av, char **env)
 {
-	int status;
+	int status = 0;
 	char *cmdline = NULL;
 	size_t len = 0;
 	char *argv[100];

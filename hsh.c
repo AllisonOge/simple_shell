@@ -64,6 +64,8 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 	char *cmdpath = NULL, buf[BUFF_SIZE];
 	struct stat st;
 
+	if (argv[0] == NULL)
+		return;
 	/* check if command exit */
 	if (stat(argv[0], &st) != 0)
 	{
