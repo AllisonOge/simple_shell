@@ -61,7 +61,6 @@ char **parsecmd(char *cmdline, char **argv)
 void runcmd(char **argv, int *status, char *pgm, char **env)
 {
 	pid_t pid;
-	int errnum;
 	char *cmdpath = NULL, buf[BUFF_SIZE];
 	struct stat st;
 
@@ -87,9 +86,8 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 	{
 		if (execve(argv[0], argv, env) == -1)
 		{
-			errnum = errno;
 			perror("Error");
-			exit(errnum);
+			exit(EXIT_FAILURE);
 		}
 	} else if (pid < 0)
 	{
