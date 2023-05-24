@@ -7,6 +7,7 @@
 /**********MAIN FUNCTIONS***************/
 char **parsecmd(char *, char **);
 void runcmd(char **, int *, char *, char **);
+ssize_t getcmd(char **, size_t *, char *);
 
 /**********BUILTINS FUNCTIONS*************/
 void printenv(char **);

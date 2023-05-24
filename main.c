@@ -10,7 +10,7 @@
 * @av: the array of arguments
 * @env: the array of environment variables
 *
-* Return: Always 0 (Success)
+* Return: exit code of the program
 */
 int main(int ac __attribute__((unused)), char **av, char **env)
 {
@@ -20,22 +20,14 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	ssize_t nread;
 	char *argv[100];
 
-	if (isatty(STDIN_FILENO))
-	{
-		write(1, "$ ", 2);
-	}
-	while ((nread = _getline(&cmdline, &len, STDIN_FILENO)) > 0)
+	while (getcmd(&cmdline, &len, "($) ") != -1)
 	{
 		if (cmdline[0] == '\n')
-		{
-			if (isatty(STDIN_FILENO))
-				write(1, "$ ", 2);
 			continue;
-		}
 		if (strncmp(cmdline, "exit", 4) == 0)
 		{
 			free(cmdline);
-			exit(0);
+			exit(WEXITSTATUS(status));
 		} else if (strncmp(cmdline, "env", 3) == 0)
 		{
 			printenv(env);
@@ -43,8 +35,6 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		{
 			runcmd(parsecmd(cmdline, argv), &status, av[0], env);
 		}
-		if (isatty(STDIN_FILENO))
-			write(1, "$ ", 2);
 	}
 	free(cmdline);
 
