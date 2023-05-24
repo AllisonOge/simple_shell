@@ -18,6 +18,6 @@ char *_strtok(char *, const char *);
 ssize_t _getline(char **, size_t *, int);
 
 /**********HELPER FUNCTIONS**************/
-ssize_t _read(int, char *, size_t);
+ssize_t readline(char **, size_t *, char *, char *, size_t, int, int);
 
 #endif /* MAIN_H */

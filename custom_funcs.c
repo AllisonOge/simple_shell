@@ -18,9 +18,8 @@
  */
 ssize_t _getline(char **lineptr, size_t *n, int fd)
 {
-	static char buffer[BUFF_SIZE], *ptr;
-	static int nread;
-	char *tmp = 0;
+	char buffer[BUFF_SIZE], *ptr = NULL;
+	int nread = 0;
 	size_t buffer_pos = 0;
 
 	if (fd < 0 || !lineptr || !n)
@@ -44,6 +43,26 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	if (nread == 0)
 		return (-2);
 	/* read line */
+	return (readline(lineptr, n, ptr, buffer, buffer_pos, nread, fd));
+}
+
+/**
+ * readline - reads an entire line from file descriptor
+ * @lineptr: pointer to the buffer containing the read line
+ * @n: size of the buffer
+ * @ptr: pointer to the buffer containing the text
+ * @buffer: buffer containing the text
+ * @buffer_pos: position in buffer
+ * @nread: number of bytes read
+ * @fd: file descriptor to read from
+ *
+ * Return: number of bytes read, -1 on failure and -2 on end of file
+*/
+ssize_t readline(char **lineptr, size_t *n, char *ptr, char *buffer,
+		size_t buffer_pos, int nread, int fd)
+{
+	char *tmp = NULL;
+
 	while (*ptr != '\n')
 	{
 		/* reallocate memory if buffer is full */
