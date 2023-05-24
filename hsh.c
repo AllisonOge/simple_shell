@@ -22,7 +22,7 @@ ssize_t getcmd(char **cmdline, size_t *len, char *prompt)
 	{
 		write(1, prompt, strlen(prompt));
 	}
-	return (getline(cmdline, len, stdin));
+	return (_getline(cmdline, len, STDIN_FILENO));
 }
 
 /**

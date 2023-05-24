@@ -20,7 +20,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	ssize_t nread;
 	char *argv[100];
 
-	while (getcmd(&cmdline, &len, "($) ") != -1)
+	while ((nread = getcmd(&cmdline, &len, "($) ")) > 0)
 	{
 		if (cmdline[0] == '\n')
 			continue;
