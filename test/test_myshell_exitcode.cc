@@ -2,7 +2,7 @@
 #include "test_myshell.h"
 #include <string.h>
 
-TEST(MyShellTest, ExitCode) {
+TEST(MyShellTest, UnknownCmd) {
     char buf[BUFF_SIZE];
     int myshell_exit_code, sh_exit_code;
 
@@ -20,12 +20,30 @@ TEST(MyShellTest, ExitCode) {
     EXPECT_EQ(myshell_exit_code, sh_exit_code);
 }
 
-TEST(MyShellTest, ExitCode2) {
+TEST(MyShellTest, ExitCmd) {
     char buf[BUFF_SIZE];
     int myshell_exit_code, sh_exit_code;
 
 
     const char* exitcmd = "exit";
+    // invoke myshell command with unknown command
+    snprintf((char *)buf, BUFF_SIZE, "echo \"%s\" | myshell", exitcmd);
+    myshell_exit_code = WEXITSTATUS(system(buf));
+
+    //invoke /bin/sh with unknown command
+    snprintf((char *)buf, BUFF_SIZE, "/bin/sh -c \"%s\"", exitcmd);
+    sh_exit_code = WEXITSTATUS(system(buf));
+
+    // check if both exit codes are the same
+    EXPECT_EQ(myshell_exit_code, sh_exit_code);
+}
+
+TEST(MyShellTest, UnknownPathAndExit) {
+    char buf[BUFF_SIZE];
+    int myshell_exit_code, sh_exit_code;
+
+
+    const char* exitcmd = "/bin/ls unknown\nexit";
     // invoke myshell command with unknown command
     snprintf((char *)buf, BUFF_SIZE, "echo \"%s\" | myshell", exitcmd);
     myshell_exit_code = WEXITSTATUS(system(buf));
