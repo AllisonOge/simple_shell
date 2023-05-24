@@ -38,7 +38,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	}
 	free(cmdline);
 
-	if (nread == -2 && isatty(STDIN_FILENO))
+	if (feof(stdin) && isatty(STDIN_FILENO))
 	{
 		write(1, "\n", 1);
 	}

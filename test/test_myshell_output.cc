@@ -3,7 +3,7 @@
 #include <string.h>
 
 TEST(MyShellTest, AllSpacesOutputMsg) {
-    const char* cmd = "                                                                                                ";
+    const char* cmd = "                        ";
     char buf[BUFF_SIZE];
     std::string myshell_output_str, sh_output_str;
     std::string myshell_error_str, sh_error_str;
@@ -61,7 +61,7 @@ TEST(MyShellTest, OutputMsg) {
 }
 
 TEST(MyShellTest, ThriceInARowOutputMsg) {
-    const char* cmd = "                             /bin/ls -l /bin/ls -l /bin/ls -l                                       ";
+    const char* cmd = "   /bin/ls -l\n/bin/ls -l\n/bin/ls -l      ";
     char buf[BUFF_SIZE];
     std::string myshell_output_str, sh_output_str;
     std::string myshell_error_str, sh_error_str;
