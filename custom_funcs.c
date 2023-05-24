@@ -5,12 +5,12 @@
 #include <string.h>
 
 /**
- * _getline - reads an entire line from stream
+ * _getline - reads an entire line from file descriptor
  * @lineptr: pointer to the buffer containing the read line
  * @n: size of the buffer
  * @fd: file descriptor to read from
  *
- * Return: number of bytes read, 0 on failure
+ * Return: number of bytes read, -1 on failure and -2 on end of file
  *
  * Description: this function reads an entire line from stream, storing the
  * address of the buffer containing the text into ptr. The buffer is null-
@@ -21,7 +21,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	static char buffer[BUFF_SIZE], *ptr;
 	static int nread;
 	size_t buffer_pos = 0;
-    ssize_t tmp = 0;
+	char *tmp = 0;
 
 	if (fd < 0 || !lineptr || !n)
 		return (-1);
@@ -48,7 +48,13 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	{
 		/* reallocate memory if buffer is full */
 		if (buffer_pos + 1 >= *n)
-			tmp = my_realloc(*lineptr, *n);
+		{
+			tmp = realloc(ptr, *n + BUFF_SIZE);
+			if (!tmp)
+				return (-1);
+			ptr = tmp;
+			*n += BUFF_SIZE;
+		}
 		(*lineptr)[buffer_pos++] = *ptr++; /* store character in buffer */
 		nread--;
 		/* read more characters if buffer is empty */
@@ -82,11 +88,11 @@ char *_strtok(char *str, const char *delim)
 	static char *next;
 	char *end;
 
-    /* if str is NULL, use saved pointer as start of string */
+	/* if str is NULL, use saved pointer as start of string */
 	if (str == NULL)
 		str = next;
 
-    /* if no more tokens are available, return NULL */
+	/* if no more tokens are available, return NULL */
 	if (*str == '\0')
 	{
 		next = str;
@@ -99,10 +105,10 @@ char *_strtok(char *str, const char *delim)
 		return (NULL);
 	}
 	end = str + strcspn(str, delim); /* find end of token */
-    /*
-     * if end of string is reached, null-terminate delimiter
-     * and set next to the next token
-     */
+	/*
+	 * if end of string is reached, null-terminate delimiter
+	 * and set next to the next token
+	 */
 	if (*end == '\0')
 	{
 		next = end;
@@ -111,23 +117,4 @@ char *_strtok(char *str, const char *delim)
 	*end = '\0';
 	next = end + 1;
 	return (str);
-}
-
-/**
- * my_realloc - reallocates a memory block with additional space of BUFF_SIZE
- * @ptr: pointer to the memory previously allocated
- * @old_size: size of the allocated space for ptr
- *
- * Return: pointer to the newly allocated memory block
-*/
-ssize_t my_realloc(void *ptr, size_t old_size)
-{
-	char *tmp;
-
-	tmp = realloc(ptr, old_size + BUFF_SIZE);
-	if (!tmp)
-		return (-1);
-	ptr = tmp;
-	old_size += BUFF_SIZE;
-	return (old_size);
 }

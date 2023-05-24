@@ -16,6 +16,8 @@ char *getcmdpath(char *, char **);
 /**********CUSTOM FUNCTIONS**************/
 char *_strtok(char *, const char *);
 ssize_t _getline(char **, size_t *, int);
-ssize_t my_realloc(void *, size_t);
+
+/**********HELPER FUNCTIONS**************/
+ssize_t _read(int, char *, size_t);
 
 #endif /* MAIN_H */

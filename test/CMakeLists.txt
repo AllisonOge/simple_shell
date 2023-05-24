@@ -33,7 +33,9 @@ if (ENABLE_VALGRIND)
     set(VALGRIND_EXECUTABLE "/usr/bin/valgrind" CACHE STRING "Valgrind executable")
     find_program(VALGRIND "valgrind")
     if (VALGRIND)
-        set(VALGRIND_OPTIONS "valgrind --leak-check=full --error-exitcode=1")
+        set(VALGRIND_OPTIONS "valgrind --track-origins=yes \
+                        --leak-check=full --show-leak-kinds=all \
+                        -s --error-exitcode=1")
 
         separate_arguments(VALGRIND_OPTIONS)
 
