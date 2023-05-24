@@ -12,7 +12,7 @@
  * parsecmd - parse the command line and tokenize the string
  * @cmdline: the command line string
  * @argv: the array of strings to store the tokens
- * Done by Ogechukwu and Florien.
+ *
  * Return: the array of strings containing the tokens
 */
 char **parsecmd(char *cmdline, char **argv)
@@ -45,7 +45,7 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 {
 	pid_t pid;
 	int errnum;
-	char *cmdpath = NULL;
+	char *cmdpath = NULL, buf[BUFF_SIZE];
 	struct stat st;
 
 	/* check if command exit */
@@ -53,14 +53,14 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 	{
 		/* get the fullpath from the env */
 		cmdpath = getcmdpath(argv[0], env);
-		printf("argv[0] -> %s\n", cmdpath);
 		if (!cmdpath)
 		{
 			*status = 32512;
 			dprintf(STDERR_FILENO, "%s: 1: %s: not found\n", pgm, argv[0]);
 			return;
 		}
-		strcpy(argv[0], cmdpath);
+		strcpy(buf, cmdpath);
+		argv[0] = buf;
 		free(cmdpath);
 	}
 
