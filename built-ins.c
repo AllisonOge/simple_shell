@@ -25,7 +25,6 @@ int _cd(char *directory, char *pgname)
 	oldpwd = getenv("OLDPWD");
 	pwd = getenv("PWD");
 	home = getenv("HOME");
-
 	if (directory == NULL)
 	{
 		if (home == NULL)
@@ -46,12 +45,8 @@ int _cd(char *directory, char *pgname)
 			dprintf(STDERR_FILENO, "%s: can't cd to %s\n", pgname, directory);
 			return (0);
 		}
-
 	if (chdir(tmp) == -1)
-	{
-		/* perror(pgname); */
 		ret = 0;
-	}
 	else
 	{
 		pwd = getcwd(NULL, 0);
