@@ -60,11 +60,6 @@ int _cd(char *directory, char *pgname)
 	}
 	else
 	{
-		if (oldpwd != NULL)
-			free(oldpwd);
-		if (pwd != NULL)
-			free(pwd);
-		oldpwd = pwd;
 		pwd = getcwd(NULL, 0);
 		if (oldpwd != NULL)
 			setenv("OLDPWD", oldpwd, 1);
