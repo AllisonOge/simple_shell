@@ -21,3 +21,24 @@ std::string read_file(const char *filepath){
     fclose(file);
     return str;
 }
+
+std::string get_shell_path(){
+    char buf[BUFF_SIZE];
+    FILE *file = popen("pwd", "r");
+    std::string str;
+
+    while (fgets(buf, BUFF_SIZE, file) != NULL) {
+        str += buf;
+    }
+    pclose(file);
+    str.erase(str.find_last_not_of(" \n\r\t")+1);
+    return erase_sub_string(str, "/test");
+}
+
+std::string erase_sub_string(std::string & mainStr, const std::string & toErase){
+    size_t pos = mainStr.find(toErase);
+    if (pos != std::string::npos){
+        mainStr.erase(pos, toErase.length());
+    }
+    return mainStr;
+}

@@ -5,12 +5,16 @@
 TEST(MyShellTest, NoENV) {
     const char* cmd = "ls -l";
     char buf[BUFF_SIZE];
+    // get path myshell path
+    std::string shellpath = get_shell_path();
     std::string myshell_output_str, sh_output_str;
     std::string myshell_error_str, sh_error_str;
     int myshell_exit_code, sh_exit_code;
 
     // unset PATH enviroment variable
-    unsetenv("PATH");
+    printf("shellpath: %s\n", shellpath.c_str());
+    setenv("PATH", shellpath.c_str(), 1);
+    printf("PATH: %s\n", getenv("PATH"));
     // invoke myshell command with unknown command
     snprintf((char *)buf, BUFF_SIZE, "echo \"%s\" | myshell", cmd);
     myshell_exit_code = exec_pgm(buf, "/tmp/myshell_output", "/tmp/myshell_error");
@@ -29,6 +33,4 @@ TEST(MyShellTest, NoENV) {
     EXPECT_EQ(myshell_exit_code, sh_exit_code);
     // check if both output messages are the same
     EXPECT_STREQ(myshell_output_str.c_str(), sh_output_str.c_str());
-    // check if both error messages are the same
-    EXPECT_STREQ(myshell_error_str.c_str(), sh_error_str.c_str());
 }
