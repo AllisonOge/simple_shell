@@ -23,17 +23,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	{
 		if (cmdline[0] == '\n')
 			continue;
-		if (strncmp(cmdline, "exit", 4) == 0)
-		{
-			free(cmdline);
-			exit(WEXITSTATUS(status));
-		} else if (strncmp(cmdline, "env", 3) == 0)
-		{
-			printenv(env);
-		} else
-		{
-			runcmd(parsecmd(cmdline, argv), &status, av[0], env);
-		}
+		runcmd(parsecmd(cmdline, argv), &status, av[0], env);
 	}
 	free(cmdline);
 

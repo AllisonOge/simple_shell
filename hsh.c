@@ -66,6 +66,9 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 
 	if (argv[0] == NULL)
 		return;
+	/* check if command is built-in */
+	if (isbuiltin(argv, env, pgm, status) == 1)
+		return;
 	/* check if command exit */
 	if (stat(argv[0], &st) != 0)
 	{
@@ -83,7 +86,7 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 	}
 
 	/* fork and execute command */
-	pid = fork();
+	pid = my_fork();
 	if (pid == 0)
 	{
 		if (execve(argv[0], argv, env) == -1)
@@ -91,93 +94,10 @@ void runcmd(char **argv, int *status, char *pgm, char **env)
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
-	} else if (pid < 0)
-	{
-		perror("Error");
-	} else
+	} else if (pid > 0)
 	{
 		do {
 			waitpid(pid, status, WUNTRACED);
 		} while (!WIFEXITED(*status) && !WIFSIGNALED(*status));
 	}
 }
-
-/**
- * getcmdpath - get the full path of the command
- * @cmd: the command
- * @env: the array of environment variables
- *
- * Return: the full path of the command
-*/
-char *getcmdpath(char *cmd, char **env)
-{
-	char *path = NULL, fullpath[BUFF_SIZE];
-	char *token;
-	char *delimiters = ": \n\t\v\r";
-	int i = 0;
-	struct stat st;
-
-	while (env[i] != NULL)
-	{
-		if (strncmp(env[i], "PATH", 4) == 0)
-		{
-			path = strdup(env[i] + 5);
-			break;
-		}
-		i++;
-	}
-	token = strtok(path, delimiters);
-	while (token != NULL)
-	{
-		strcat(strcpy(fullpath, token), "/");
-		strcat(strcat(fullpath, cmd), "\0");
-		if (stat(fullpath, &st) == 0)
-		{
-			free(path);
-			return (strdup(fullpath));
-		}
-		token = strtok(NULL, delimiters);
-	}
-	free(path);
-	return (NULL);
-}
-
-/**
- * printenv - print the environment variables
- * @env: the array of environment variables
-*/
-void printenv(char **env)
-{
-	int i = 0;
-
-	while (env[i] != NULL)
-	{
-		printf("%s\n", env[i]);
-		i++;
-	}
-}
-
-/**
- * _cd - change the current working directory
- * @filepath: the path to the directory
- * @pgm: the name of the program
- *
- * void _cd(char *filepath, char *pgm)
- * {
- *	int errnum;
- *	struct stat st;
- *
- *	if (stat(filepath, &st) == 0)
- *	{
- *		if (chdir(filepath) == -1)
- *		{
- *			errnum = errno;
- *			perror("Error");
- *			exit(errnum);
- *		}
- *	} else
- *	{
- *		dprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n", pgm, filepath);
- *	}
- *}
- */

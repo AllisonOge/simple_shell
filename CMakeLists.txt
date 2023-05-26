@@ -23,6 +23,7 @@ include_directories(include)
 file(GLOB_RECURSE SRC main.c 
 					hsh.c 
 					built-ins.c 
+					helpers.c
 					)
 add_executable(myshell ${SRC})
 
