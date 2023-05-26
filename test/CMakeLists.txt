@@ -17,6 +17,7 @@ add_test_executable(test_myshell_exitcode test_myshell_exitcode.cc)
 add_test_executable(test_myshell_error test_myshell_errormsg.cc)
 add_test_executable(test_myshell_output test_myshell_output.cc)
 add_test_executable(test_myshell_noenv test_myshell_noenv.cc)
+add_test_executable(test_myshell_cd test_myshell_cd.cc)
 
 # add test
 add_test(NAME ExitCode 
@@ -27,9 +28,11 @@ add_test(NAME OutputMsg
         COMMAND test_myshell_output)
 add_test(NAME NoENV 
         COMMAND test_myshell_noenv)
+add_test(NAME Cd 
+        COMMAND test_myshell_cd)
 
 # set PATH to find myshell
-set_tests_properties(ExitCode ErrorMsg OutputMsg NoENV 
+set_tests_properties(ExitCode ErrorMsg OutputMsg NoENV Cd 
         PROPERTIES ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 
 if (ENABLE_VALGRIND)
