@@ -78,6 +78,7 @@ void printenv(char **env)
 /**
  * exitshell - exit the shell
  * @exit_code: the exit code
+ * @status: the exit status
 */
 void exitshell(char *exit_code, int *status)
 {
