@@ -21,7 +21,9 @@ add_subdirectory(test)
 
 include_directories(include)
 file(GLOB_RECURSE SRC main.c 
-	hsh.c)
+					hsh.c 
+					built-ins.c 
+					)
 add_executable(myshell ${SRC})
 
 add_custom_target(
