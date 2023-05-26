@@ -29,19 +29,13 @@ int _cd(char *directory, char *pgname)
 	if (directory == NULL)
 	{
 		if (home == NULL)
-		{
-			dprintf(STDERR_FILENO, "%s: No $HOME variable set\n", pgname);
 			return (0);
-		}
 		tmp = strdup(home);
 	}
 	else if (strcmp(directory, "-") == 0)
 	{
 		if (oldpwd == NULL)
-		{
-			dprintf(STDERR_FILENO, "%s: OLDPWD not set\n", pgname);
 			return (0);
-		}
 		tmp = strdup(oldpwd);
 	}
 	else
@@ -55,7 +49,7 @@ int _cd(char *directory, char *pgname)
 
 	if (chdir(tmp) == -1)
 	{
-		perror(pgname);
+		/* perror(pgname); */
 		ret = 0;
 	}
 	else
