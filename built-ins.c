@@ -88,7 +88,7 @@ void exitshell(char *exit_code, int *status)
 	if (isdigit(exit_code[0]) == 0)
 	{
 		dprintf(STDERR_FILENO, "Error: illegal number %s\n", exit_code);
-		*status = 2;
+		*status = 512;
 		return;
 	}
 	code = atoi(exit_code);
@@ -122,7 +122,7 @@ int isbuiltin(char **cmd, char **env, char *pgname, int *status)
 	if (strcmp(cmd[0], "cd") == 0)
 	{
 		if (_cd(cmd[1], pgname) == 0)
-			*status = 2;
+			*status = 512;
 		return (1);
 	}
 	return (0);
